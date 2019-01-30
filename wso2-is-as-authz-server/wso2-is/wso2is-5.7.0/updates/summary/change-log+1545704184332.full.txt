@@ -1,0 +1,345 @@
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-user-data.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-user-data.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-access-token.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-access-token.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-remeber-me.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-remeber-me.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_OPENID_REMEMBER_ME
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-user-account-association.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-user-account-association.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_USER_ACCOUNT_ASSOCIATION
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND DOMAIN_NAME = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-access-token.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-access-token.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_OAUTH1A_ACCESS_TOKEN
++SET AUTHZ_USER = `pseudonym`
++WHERE AUTHZ_USER =  `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-request-token.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-request-token.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_OAUTH1A_REQUEST_TOKEN
++SET AUTHZ_USER = `pseudonym`
++WHERE AUTHZ_USER =  `username`
++      AND TENANT_ID = `tenant_id`
+
+--- dbscripts/identity/mysql-5.7.sql
++++ dbscripts/identity/mysql-5.7.sql
+@@ -184,8 +184,7 @@
+
+ CREATE INDEX IDX_IDN_SCIM_GROUP_TI_RN ON IDN_SCIM_GROUP (TENANT_ID, ROLE_NAME);
+
+-CREATE INDEX IDX_IDN_SCIM_GROUP_TI_RN_AN ON IDN_SCIM_GROUP (TENANT_ID, ROLE_NAME, ATTR_NAME);
+-
++CREATE INDEX IDX_IDN_SCIM_GROUP_TI_RN_AN ON IDN_SCIM_GROUP (TENANT_ID, ROLE_NAME, ATTR_NAME(500));
+
+ CREATE TABLE IF NOT EXISTS IDN_OPENID_REMEMBER_ME (
+             USER_NAME VARCHAR(255) NOT NULL,
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-associated-id.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-associated-id.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_ASSOCIATED_ID
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND DOMAIN_NAME = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth2-accesstoken.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth2-accesstoken.sql
+@@ -0,0 +1,7 @@
++UPDATE IDN_OAUTH2_ACCESS_TOKEN
++SET AUTHZ_USER = `pseudonym`, SUBJECT_IDENTIFIER = `pseudonym`
++WHERE AUTHZ_USER = `username`
++      AND USER_DOMAIN = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
++
++
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-meta-data.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-meta-data.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth2-authorization-code.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth2-authorization-code.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_OAUTH2_AUTHORIZATION_CODE
++SET AUTHZ_USER = `pseudonym`, SUBJECT_IDENTIFIER = `pseudonym`
++WHERE AUTHZ_USER = `username`
++      AND USER_DOMAIN = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-users-rps.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-users-rps.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_OPENID_USER_RPS
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-account-mapping.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-account-mapping.sql
+@@ -0,0 +1,6 @@
++UPDATE UM_ACCOUNT_MAPPING
++SET UM_USER_NAME = `pseudonym`
++WHERE UM_USER_NAME = `username`
++	  AND UM_USER_STORE_DOMAIN = `user_store_domain`
++      AND UM_TENANT_ID = `tenant_id`
++
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-bps-profile.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-bps-profile.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/fido-device-store.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/fido-device-store.sql
+@@ -0,0 +1,5 @@
++UPDATE FIDO_DEVICE_STORE
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND DOMAIN_NAME = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-auth-user.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-auth-user.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_AUTH_USER
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND DOMAIN_NAME = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth-consumer-apps.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth-consumer-apps.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_OAUTH_CONSUMER_APPS
++SET USERNAME = `pseudonym`
++WHERE USERNAME = `username`
++      AND USER_DOMAIN = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-thrift-session.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-thrift-session.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user.sql
+@@ -0,0 +1,4 @@
++UPDATE UM_SYSTEM_USER
++SET UM_USER_NAME = `pseudonym`
++WHERE UM_USER_NAME = `username`
++      AND UM_TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-saml2-assertion-store.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-saml2-assertion-store.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/sp-app.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/sp-app.sql
+@@ -0,0 +1,5 @@
++UPDATE SP_APP
++SET USERNAME = `pseudonym`
++WHERE USERNAME = `username`
++      AND USER_STORE = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/config.json
++++ repository/components/tools/forget-me/ext/user-store/conf/config.json
+@@ -0,0 +1,62 @@
++{
++  "processors" : [
++    "rdbms", "user-store"
++  ],
++  "directories": [
++    {
++      "dir": "sql",
++      "type": "rdbms",
++      "processor" : "rdbms"
++    },
++    {
++      "dir": "user-store",
++      "type": "user-store",
++      "processor" : "user-store"
++    }
++  ],
++  "extensions": [
++    {
++      "dir": "../../../../../../conf/datasources",
++      "type": "datasource",
++      "processor" : "rdbms",
++      "properties" : [
++        {"identity": "WSO2_CARBON_DB"}
++      ]
++    },
++    {
++      "dir": "../../../../../../../",
++      "type": "user-store",
++      "processor" : "user-store",
++      "properties" : [
++        {
++          "handler-mapping;org.wso2.carbon.user.core.ldap.ReadWriteLDAPUserStoreManager":"read-write-ldap-handler",
++          "handler-mapping;org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager":"jdbc-handler",
++          "handler-mapping;org.wso2.carbon.user.core.ldap.ActiveDirectoryUserStoreManager":"read-write-ldap-handler"
++        }
++      ]
++    }
++  ],
++  "reports": [
++    {
++    "dir": ".",
++    "type": "plain-text",
++    "processor": "user-store",
++    "properties": [
++        {
++          "log-user-identifier": "true"
++        }
++      ]
++    },
++    {
++    "dir": ".",
++    "type": "plain-text",
++    "processor": "rdbms",
++    "properties": [
++        {
++          "log-user-identifier": "true"
++        }
++      ]
++    }
++  ]
++}
++
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/cm-receipt.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/cm-receipt.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-user-data.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-user-data.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_IDENTITY_USER_DATA
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME =  `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-recovery-data.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-recovery-data.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_RECOVERY_DATA
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND USER_DOMAIN = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-saml2-assertion-store.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-saml2-assertion-store.sql
+@@ -0,0 +1,3 @@
++UPDATE IDN_SAML2_ASSERTION_STORE
++SET SAML2_SUBJECT = `pseudonym`
++WHERE SAML2_SUBJECT = `username`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-request.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-request.sql
+@@ -0,0 +1,4 @@
++UPDATE WF_REQUEST
++SET CREATED_BY = `pseudonym`
++WHERE CREATED_BY = `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-meta-data.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-identity-meta-data.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_IDENTITY_META_DATA
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME =  `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-remeber-me.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-remeber-me.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-users-rps.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-openid-users-rps.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-password-history-data.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-password-history-data.sql
+@@ -0,0 +1,5 @@
++UPDATE IDN_PASSWORD_HISTORY_DATA
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND USER_DOMAIN = `user_store_domain`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-thrift-session.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-thrift-session.sql
+@@ -0,0 +1,4 @@
++UPDATE IDN_THRIFT_SESSION
++SET USER_NAME = `pseudonym`
++WHERE USER_NAME = `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/cm-receipt.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/cm-receipt.sql
+@@ -0,0 +1,4 @@
++UPDATE CM_RECEIPT
++SET PII_PRINCIPAL_ID = `pseudonym`
++WHERE PII_PRINCIPAL_ID = `username`
++      AND PRINCIPAL_TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-request-token.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/idn-oauth1a-request-token.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user-role.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/um-system-user-role.sql
+@@ -0,0 +1,5 @@
++UPDATE UM_SYSTEM_USER_ROLE
++SET UM_USER_NAME = `pseudonym`
++WHERE UM_USER_NAME = `username`
++      AND UM_TENANT_ID = `tenant_id`
++
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-bps-profile.sql
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-bps-profile.sql
+@@ -0,0 +1,4 @@
++UPDATE WF_BPS_PROFILE
++SET USERNAME = `pseudonym`
++WHERE USERNAME = `username`
++      AND TENANT_ID = `tenant_id`
+
+--- repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-request.sql.properties
++++ repository/components/tools/forget-me/ext/user-store/conf/sql/identity/wf-request.sql.properties
+@@ -0,0 +1,1 @@
++type=DOMAIN_APPENDED_PSEUDONYM
+
